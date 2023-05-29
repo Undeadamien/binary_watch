@@ -4,7 +4,6 @@ from tkinter import Canvas, Label, Tk
 
 
 class App(Tk):
-
     def __init__(self):
         super().__init__()
 
@@ -12,11 +11,7 @@ class App(Tk):
         self.overrideredirect(True)
         self.attributes("-topmost", True)
         self.geometry("+0+0")
-        self.config(
-            bg="black",
-            highlightcolor="white",
-            highlightthickness=1
-        )
+        self.config(bg="black", highlightcolor="white", highlightthickness=1)
 
         self.cell_size = 40  # dont render properly under 40
         self.font = f"Arial {self.cell_size//2} bold"
@@ -24,33 +19,36 @@ class App(Tk):
 
         self.start_x, self.start_y = None, None
 
-        self.hour_label = Label(self,
-                                text="H",
-                                justify="center",
-                                font=self.font,
-                                bg="black",
-                                fg="white",
-                                highlightcolor="white",
-                                highlightthickness=1
-                                )
+        self.hour_label = Label(
+            self,
+            text="H",
+            justify="center",
+            font=self.font,
+            bg="black",
+            fg="white",
+            highlightcolor="white",
+            highlightthickness=1,
+        )
 
-        self.minute_label = Label(self,
-                                  text="M",
-                                  justify="center",
-                                  font=self.font,
-                                  bg="black",
-                                  fg="white",
-                                  highlightcolor="white",
-                                  highlightthickness=1
-                                  )
+        self.minute_label = Label(
+            self,
+            text="M",
+            justify="center",
+            font=self.font,
+            bg="black",
+            fg="white",
+            highlightcolor="white",
+            highlightthickness=1,
+        )
 
-        self.canvas = Canvas(self,
-                             width=6*self.cell_size,
-                             height=2*self.cell_size,
-                             bg="black",
-                             highlightcolor="white",
-                             highlightthickness=1
-                             )
+        self.canvas = Canvas(
+            self,
+            width=6 * self.cell_size,
+            height=2 * self.cell_size,
+            bg="black",
+            highlightcolor="white",
+            highlightthickness=1,
+        )
 
         for index in range(7):
             self.grid_columnconfigure(index=index, minsize=self.cell_size)
@@ -67,13 +65,11 @@ class App(Tk):
         self.bind("<ButtonRelease-1>", self.stop_move)
 
     def update_clock(self):
-
         current = datetime.now()
         self.update_display(current.hour, current.minute)
         self.after(1000, self.update_clock)
 
     def update_display(self, hour, minute):
-
         time_values = [32, 16, 8, 4, 2, 1]
 
         # draw the hour row
@@ -82,13 +78,13 @@ class App(Tk):
             if hour >= value:
                 hour -= value
             self.canvas.create_rectangle(
-                index*self.cell_size,
+                index * self.cell_size,
                 0,
-                (index+1)*self.cell_size+1,
+                (index + 1) * self.cell_size + 1,
                 self.cell_size,
                 fill=fill_color,
                 outline="white",
-                width=1
+                width=1,
             )
 
         # draw the minute row
@@ -97,13 +93,13 @@ class App(Tk):
             if minute >= value:
                 minute -= value
             self.canvas.create_rectangle(
-                index*self.cell_size,
-                self.cell_size+1,
-                (index+1)*self.cell_size+1,
-                self.cell_size*2+1,
+                index * self.cell_size,
+                self.cell_size + 1,
+                (index + 1) * self.cell_size + 1,
+                self.cell_size * 2 + 1,
                 fill=fill_color,
                 outline="white",
-                width=1
+                width=1,
             )
 
     def start(self):
@@ -114,8 +110,10 @@ class App(Tk):
         self.start_x, self.start_y = event.x, event.y
 
     def do_move(self, event):
-        self.geometry(f"+{self.winfo_x() + event.x - self.start_x}" +
-                      f"+{self.winfo_y() + event.y - self.start_y}")
+        self.geometry(
+            f"+{self.winfo_x() + event.x - self.start_x}"
+            + f"+{self.winfo_y() + event.y - self.start_y}"
+        )
 
     def stop_move(self, _):
         self.start_x, self.start_y = None, None
